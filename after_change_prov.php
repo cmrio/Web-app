@@ -3,15 +3,12 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>Поставщики</title>
-  <link rel="stylesheet" href="mainP.css">
-
+  <title>Изменить поставщика</title>
+  <link rel="stylesheet" href="mainF.css">
 </head>
-
 <body>
-
-<br>
- <nav>
+<img src="/WEB-APP/img/up.png" width="100%" height="18">
+  <nav>
     <ul class="topmenu">
       
             <li><a href="" class="active">Поиск<span class="fa fa-angle-down"></span></a>
@@ -78,19 +75,13 @@
   </nav>
 
 
+
   <table width="100%" cellspacing="0" cellpadding="5">
     <tr>
-
-      <td align="left" width="10%">
-        <a href="/WEB-APP/script/provider/add_prov.php" class="button8">Добавить поставщика</a>
-        <br>
-        <br>
-        <a href="/WEB-APP/script/provider/change_prov.php" class="button8">Изменить поставщика</a>
-        <br>
-        <br>
-        <a href="/WEB-APP/script/provider/prov.php" class="button8">Вернуться</a>
+      <td background="/WEB-APP/img/111.png" width="300" height="670">
       </td>
 
+      <td align="middle">
         <?php
        $i = 0;
        $host = 'localhost';
@@ -99,47 +90,38 @@
        $pass = '1234';
        $charset = 'utf8';
        $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
-       $pdo = new PDO($dsn, $user, $pass,[PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
+       $pdo = new PDO($dsn, $user, $pass,[PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]); 
+       $flag = 0;              
 
-       $stmt = $pdo->query ('SELECT name_prov, address_prov, phone_prov 
-                             FROM provider
-                             ORDER BY name_prov ASC ');
-
-        $name=$_POST['name']; 
-
+        $name = $_POST['name'];
+        $address = $_POST['address'];
+        $phone = $_POST['phone'];
+                                     
+         
+        $stmt = $pdo->query ('SELECT name_prov, address_prov, phone_prov 
+                             FROM provider');
         while ($row = $stmt->fetch()) {
-        if( mb_strtoupper(substr($row['name_prov'],0,strlen($name))) == mb_strtoupper($name) ){
-        $prod[$i][0] = $row['name_prov']; 
-        $prod[$i][1] = $row['address_prov']; 
-        $prod[$i][2] = $row['phone_prov']; 
-        $i = $i + 1;   }    
-                                   } 
-              
- 
-        if( $i != 0) {
-        echo '<td align="center">
-           <table class="scroll" align="center" border = 1>
-            <thead>
-              <tr>
-                <th>Имя поставщика</th>
-                <th>Адрес</th>
-                <th>Номер телефона</th>
-              </tr>
-              <thead>
-                <tbody>';
-            
-            for($i = 0; $i < count($prod); $i++){
-             echo '<tr>';
-             echo '<td align="center">'.$prod[$i][0].'</td>'.'<td align="center">'.$prod[$i][1].'</td>'.'<td align="center">'.$prod[$i][2].'</td>'; 
-             echo '</tr>';                       } 
-           
-              echo '</tbody>
-          </table>'; } else {
-                  echo '<td align="center" bgcolor="#f8f6f1" width="20%">
-                        <font color="#454545" size ="6"><b>Ничего не найдено</b></font>';} ?>
+        if($name == $row['name_prov'] and $address == $row['address_prov'] and $phone == $row['phone_prov']) { $flag = 1;};
+                                     } 
+
+             
+                       
+        if(!$flag){       
+        $sql = "UPDATE provider SET name_prov = ?, address_prov = ?,phone_prov = ? WHERE id_prov = ?";
+        $stmt= $pdo->prepare($sql);
+        if($stmt->execute([$name, $address, $phone, $_POST['id_prov']])){ 
+          echo '<b><font color="#454545" size ="3">'.'Поставщик изменен!'.'</font></b><br>';
+          echo'<img src="/WEB-APP/img/ok.png"width="370"height="280">'.'<br>';
+          echo'<a href="/WEB-APP/script/provider/prov.php" class="button8">Просмотр поставщиков</a>'; }
+                         } else {
+          echo '<b><font color="#454545" size ="3">'.'Такой поставщик уже есть!'.'</font></b><br>';
+          echo'<img src="/WEB-APP/img/not.png"width="370"height="280">'.'<br>';
+          echo'<a href="/WEB-APP/script/provider/prov.php" class="button8">Просмотр поставщиков</a>';}
+                                            
+     ?>
       </td>
-         <td align="left" width="20%" valign="top">
-       <table class="new" align="right" border="1">
+            <td background="/WEB-APP/img/111.png" width="300" height="670">
+        <table class="new" align="right" border="1" >
           <thead>
             <tr>
               <th><b>Доска обьявлений</b></th>

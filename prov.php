@@ -11,7 +11,7 @@
 <body>
 
 <br>
- <nav>
+  <nav>
     <ul class="topmenu">
       
             <li><a href="" class="active">Поиск<span class="fa fa-angle-down"></span></a>
@@ -81,16 +81,14 @@
   <table width="100%" cellspacing="0" cellpadding="5">
     <tr>
 
-      <td align="left" width="10%">
+      <td align="left">
         <a href="/WEB-APP/script/provider/add_prov.php" class="button8">Добавить поставщика</a>
         <br>
         <br>
         <a href="/WEB-APP/script/provider/change_prov.php" class="button8">Изменить поставщика</a>
-        <br>
-        <br>
-        <a href="/WEB-APP/script/provider/prov.php" class="button8">Вернуться</a>
       </td>
 
+      <td align="middle">
         <?php
        $i = 0;
        $host = 'localhost';
@@ -105,20 +103,16 @@
                              FROM provider
                              ORDER BY name_prov ASC ');
 
-        $name=$_POST['name']; 
-
         while ($row = $stmt->fetch()) {
-        if( mb_strtoupper(substr($row['name_prov'],0,strlen($name))) == mb_strtoupper($name) ){
         $prod[$i][0] = $row['name_prov']; 
         $prod[$i][1] = $row['address_prov']; 
         $prod[$i][2] = $row['phone_prov']; 
-        $i = $i + 1;   }    
+        $i = $i + 1;       
                                    } 
               
- 
-        if( $i != 0) {
-        echo '<td align="center">
-           <table class="scroll" align="center" border = 1>
+       if($i != 0) {
+
+         echo '<table class="scroll" align="center" border = 1>
             <thead>
               <tr>
                 <th>Имя поставщика</th>
@@ -127,18 +121,29 @@
               </tr>
               <thead>
                 <tbody>';
-            
+                  
             for($i = 0; $i < count($prod); $i++){
              echo '<tr>';
              echo '<td align="center">'.$prod[$i][0].'</td>'.'<td align="center">'.$prod[$i][1].'</td>'.'<td align="center">'.$prod[$i][2].'</td>'; 
-             echo '</tr>';                       } 
+             echo '</tr>'; }
            
-              echo '</tbody>
+
+             echo'</tbody>
           </table>'; } else {
-                  echo '<td align="center" bgcolor="#f8f6f1" width="20%">
-                        <font color="#454545" size ="6"><b>Ничего не найдено</b></font>';} ?>
+                  echo '<font color="#454545" size ="6"><b>Нечего не найдено</b></font>';} ?>
       </td>
          <td align="left" width="20%" valign="top">
+        <br>
+        <br>
+        <br>
+        <br>
+        <form action="/WEB-APP/script/provider/after_search.php" METHOD="post">
+          <b>Введите имя поставщика</b><p>
+          <INPUT TYPE="text" name = "name" required required size="30">
+        <INPUT TYPE="Submit" VALUE= "Поиск" > <br>
+        </form>
+        <br>
+        <br>
        <table class="new" align="right" border="1">
           <thead>
             <tr>
